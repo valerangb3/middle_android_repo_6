@@ -1,12 +1,7 @@
 package ru.yandexpraktikum.notekeeper.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,11 +9,9 @@ import ru.yandexpraktikum.add_note.presentation.AddNoteScreen
 import ru.yandexpraktikum.add_note.presentation.AddNoteViewModel
 import ru.yandexpraktikum.all_notes.presentation.AllNotesScreen
 import ru.yandexpraktikum.all_notes.presentation.AllNotesViewModel
-import ru.yandexpraktikum.notekeeper.di.ApplicationComponent
 
 @Composable
 fun NoteKeeperNavHost(
-    appComponent: ApplicationComponent,
     navController: NavHostController
 ) {
     NavHost(
@@ -26,12 +19,7 @@ fun NoteKeeperNavHost(
         startDestination = Screen.AllNotes.route
     ) {
         composable(route = Screen.AllNotes.route) {
-            val allNotesSubcomponent = appComponent
-                .allNotesSubcomponent()
-                .create()
-            val vm: AllNotesViewModel = viewModel(
-                factory = allNotesSubcomponent.allNotesViewModelFactory()
-            )
+            val vm: AllNotesViewModel = hiltViewModel()
             AllNotesScreen(
                 viewModel = vm,
                 onAddNoteClick = {
@@ -40,12 +28,7 @@ fun NoteKeeperNavHost(
             )
         }
         composable(route = Screen.AddNote.route) {
-            val addNoteComponent = appComponent
-                .addNoteSubcomponent()
-                .create()
-            val vm: AddNoteViewModel = viewModel(
-                factory = addNoteComponent.addNoteViewModelFactory()
-            )
+            val vm: AddNoteViewModel = hiltViewModel()
             AddNoteScreen(
                 viewModel = vm,
                 onBackClick = {
